@@ -239,6 +239,10 @@ namespace GitHub.Runner.Listener
                             File.SetAttributes(configFile, File.GetAttributes(configFile) | FileAttributes.Hidden);
                             Trace.Info($"Saved {configContent.Length} bytes to '{configFile}'.");
                         }
+
+                        // make sure we have the right user agent data added from the jitconfig
+                        HostContext.LoadDefaultUserAgents();
+                        VssUtil.InitializeVssClientSettings(HostContext.UserAgents, HostContext.WebProxy);
                     }
                     catch (Exception ex)
                     {
@@ -580,7 +584,7 @@ namespace GitHub.Runner.Listener
                                         await runServer.ConnectAsync(new Uri(messageRef.RunServiceUrl), creds);
                                         try
                                         {
-                                            jobRequestMessage = await runServer.GetJobMessageAsync(messageRef.RunnerRequestId, messageQueueLoopTokenSource.Token);
+                                            jobRequestMessage = await runServer.GetJobMessageAsync(messageRef.RunnerRequestId, messageRef.BillingOwnerId, messageQueueLoopTokenSource.Token);
                                             _acquireJobThrottler.Reset();
                                         }
                                         catch (Exception ex) when (

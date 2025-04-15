@@ -1,18 +1,23 @@
 ## What's Changed
+* Fix name of generated of artifact builds from GitHub workflow for arm artifacts by @satmandu in https://github.com/actions/runner/pull/3568
+* Ignore error when fail to report worker crash. by @TingluoHuang in https://github.com/actions/runner/pull/3588
+* Fix null ref in 'OnEventWritten()' by @TingluoHuang in https://github.com/actions/runner/pull/3593
+* Send stepNumber for annotation to run-service by @TingluoHuang in https://github.com/actions/runner/pull/3614
+* Enable nuget audit. by @TingluoHuang in https://github.com/actions/runner/pull/3615
+* Update dotnet install script. by @TingluoHuang in https://github.com/actions/runner/pull/3659
+* Print immutable action package details in set up job logs by @heavymachinery in https://github.com/actions/runner/pull/3645
+* Update dotnet sdk to latest version @8.0.405 by @github-actions in https://github.com/actions/runner/pull/3666
+* Upgrade `buildx` from `0.18.0` to `0.19.3` (critical CVE) by @MPV in https://github.com/actions/runner/pull/3647
+* Upgrade `docker` from `27.3.1` to `27.4.1` by @MPV in https://github.com/actions/runner/pull/3648
+* Bump Microsoft.NET.Test.Sdk from 17.8.0 to 17.12.0 in /src by @dependabot in https://github.com/actions/runner/pull/3584
+* Bump docker/setup-buildx-action from 2 to 3 by @dependabot in https://github.com/actions/runner/pull/3564
+* Bump github/codeql-action from 2 to 3 by @dependabot in https://github.com/actions/runner/pull/3555
+* Bump Moq from 4.20.70 to 4.20.72 in /src by @dependabot in https://github.com/actions/runner/pull/3672
 
-- Update Docker to v27.1.1 by @TingluoHuang in https://github.com/actions/runner/pull/3401
-- Upgrade dotnet sdk to v8.0.303 in https://github.com/actions/runner/pull/3388
-- Rephrase node20 warning by @rentziass in https://github.com/actions/runner/pull/3376
-- Bump hook version to 0.6.1 by @nikola-jokic in https://github.com/actions/runner/pull/3350
-- Backoff to avoid excessive retries to Run Service in a duration by @ericsciple in https://github.com/actions/runner/pull/3354
-- Bump System.Security.Cryptography.Pkcs from 5.0.0 to 8.0.0 in /src in https://github.com/actions/runner/pull/3347
-- Upgrade dotnet sdk to v8.0.302 in https://github.com/actions/runner/pull/3346
-- Bump runner to dotnet 8 by @TingluoHuang in https://github.com/actions/runner/pull/3345
-- Pass runner version as environment variable in workflow by @joshmgross in https://github.com/actions/runner/pull/3318
-- Make sure we mask secrets when reporting telemetry by @TingluoHuang in https://github.com/actions/runner/pull/3315
-- Bump docker version and docker buildx version by @int128 in https://github.com/actions/runner/pull/3277
+## New Contributors
+* @satmandu made their first contribution in https://github.com/actions/runner/pull/3568
 
-**Full Changelog**: https://github.com/actions/runner/compare/v2.317.0...v2.318.0
+**Full Changelog**: https://github.com/actions/runner/compare/v2.321.0...v2.322.0
 
 _Note: Actions Runner follows a progressive release policy, so the latest release might not be available to your enterprise, organization, or repository yet.
 To confirm which version of the Actions Runner you should expect, please view the download instructions for your enterprise, organization, or repository.
@@ -34,9 +39,7 @@ Add-Type -AssemblyName System.IO.Compression.FileSystem ;
 [System.IO.Compression.ZipFile]::ExtractToDirectory("$PWD\actions-runner-win-x64-<RUNNER_VERSION>.zip", "$PWD")
 ```
 
-## [Pre-release] Windows arm64
-
-**Warning:** Windows arm64 runners are currently in preview status and use [unofficial versions of nodejs](https://unofficial-builds.nodejs.org/). They are not intended for production workflows.
+## Windows arm64
 
 We recommend configuring the runner in a root folder of the Windows drive (e.g. "C:\actions-runner"). This will help avoid issues related to service identity folder permissions and long file path restrictions on Windows.
 
