@@ -1,0 +1,39 @@
+name: Auto Update Runner Version
+
+on:
+  schedule:
+    # Run every 3 weeks (21 days) at 00:00 UTC on Monday
+    - cron: '0 0 */21 * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  check-and-update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get latest runner release
+        id: get_release
+        run: |
+          # Fetch the latest release from actions/runner
+          LATEST_RELEASE=$(curl -s https://api.github.com/repos/actions/runner/releases/latest | jq -r '.tag_name')
+          echo "Latest release: $LATEST_RELEASE"
+          
+          # Remove the 'v' prefix
+          VERSION=${LATEST_RELEASE#v}
+          echo "Version without prefix: $VERSION"
+          
+          # Set output for next step
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "tag=$LATEST_RELEASE" >> $GITHUB_OUTPUT
+
+      - name: Trigger build workflow
+        run: |
+          curl -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/${{ github.repository }}/actions/workflows/publish-image.yml/dispatches \
+            -d '{"ref":"main","inputs":{"runnerVersion":"${{ steps.get_release.outputs.version }}"}}'
+
+      - name: Log completion
+        run: |
+          echo "Successfully triggered build workflow with runner version ${{ steps.get_release.outputs.version }}"
