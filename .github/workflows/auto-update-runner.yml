@@ -2,14 +2,30 @@ name: Auto Update Runner Version
 
 on:
   schedule:
-    # Run every 3 weeks (21 days) at 00:00 UTC on Monday
-    - cron: '0 0 */21 * *'
+    # Run on the 1st of every month at 00:00 UTC
+    - cron: '0 0 1 * *'
   workflow_dispatch: # Allow manual trigger
+
+permissions:
+  contents: write
 
 jobs:
   check-and-update:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Commit keep-alive timestamp
+        run: |
+          # GitHub disables scheduled workflows after 60 days without repository activity
+          date -u +%Y-%m-%dT%H:%M:%SZ > .github/last-activity.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .github/last-activity.txt
+          git commit -m "Build new runner #$(date -u +%Y-%m-%d)"
+          git push
+
       - name: Get latest runner release
         id: get_release
         run: |
