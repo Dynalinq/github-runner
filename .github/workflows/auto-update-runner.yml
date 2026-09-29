@@ -22,9 +22,10 @@ jobs:
           date -u +%Y-%m-%dT%H:%M:%SZ > .github/last-activity.txt
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B keep-alive
           git add .github/last-activity.txt
           git commit -m "Build new runner #$(date -u +%Y-%m-%d)"
-          git push
+          git push --force origin keep-alive
 
       - name: Get latest runner release
         id: get_release
